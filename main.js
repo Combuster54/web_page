@@ -51,8 +51,8 @@ var app = new Vue({
                 
                 this.mapViewer = new ROS2D.Viewer({
                     divID: 'map',
-                    width: 420,
-                    height: 360
+                    width: 320,
+                    height: 240,
                 })
 
                 // Setup the map client.
@@ -61,7 +61,7 @@ var app = new Vue({
                     rootObject: this.mapViewer.scene,
                     continuous: true,
                 })
-                // Scale the canvas to fit to the map
+                
                 this.mapGridClient.on('change', () => {
                     this.mapViewer.scaleToDimensions(this.mapGridClient.currentGrid.width, this.mapGridClient.currentGrid.height);
                     this.mapViewer.shift(this.mapGridClient.currentGrid.pose.position.x, this.mapGridClient.currentGrid.pose.position.y)

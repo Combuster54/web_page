@@ -35,8 +35,8 @@
         #dragstartzone {
             position: relative;
             display: inline-block;
-            width: 200px;
-            height: 200px;
+            width: 125px;
+            height: 125px;
             border: 1px solid #333;
             border-radius: 50%;
             z-index: 10;
@@ -92,7 +92,7 @@
             <div class="col-9">
                 <h3>Controls</h3>
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-5">
                         <div class="card mt-2">
                             <div class="card-header">
                                 <h4>Robot model</h4>
@@ -109,12 +109,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-8">
+                    <div class="col-6">
                         <div class="card mt-2">
                             <div class="card-header">
                                 <h4>Generated Map</h4>
                                 <div class="col-md-12 col-sm-6" style="overflow:auto;">
-                                    <!-- 1st row -->
                                     <div class="row">
                                         <div class="col-md-12 text-center my-2">
                                             <div id="map"></div>
@@ -128,7 +127,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-5">
                         <div class="card mt-2">
                             <div class="card-header">
                                 <h4>Camera</h4>
@@ -140,11 +139,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-8">
+                    <div class="col-3">
                         <div class="card mt-2">
                             <div class="card-header">
                                 <h4>Commands</h4>
-                                <div class="col-md-4">
+                                <div class="col-md-15">
                                     <div class="card">
                                         <div class="card-body text-center">
                                             <p>Vertical: {{ joystick.vertical.toFixed(3) }}</p>
