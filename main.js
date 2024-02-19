@@ -51,8 +51,8 @@ var app = new Vue({
                 
                 this.mapViewer = new ROS2D.Viewer({
                     divID: 'map',
-                    width: 320,
-                    height: 240,
+                    width: 300,
+                    height: 200,
                 })
 
                 // Setup the map client.
@@ -63,8 +63,8 @@ var app = new Vue({
                 })
                 
                 this.mapGridClient.on('change', () => {
-                    this.mapViewer.scaleToDimensions(this.mapGridClient.currentGrid.width, this.mapGridClient.currentGrid.height);
-                    this.mapViewer.shift(this.mapGridClient.currentGrid.pose.position.x, this.mapGridClient.currentGrid.pose.position.y)
+                    this.mapViewer.scaleToDimensions(this.mapGridClient.currentGrid.width /2 , this.mapGridClient.currentGrid.height / 2);
+                    this.mapViewer.shift(this.mapGridClient.currentGrid.pose.position.x + 0, this.mapGridClient.currentGrid.pose.position.y + 0.0)
                 })
 
                 this.setup3DViewer()
@@ -94,7 +94,7 @@ var app = new Vue({
             })
             let message = new ROSLIB.Message({
                 linear: { x: this.joystick.vertical, y: 0, z: 0, },
-                angular: { x: 0, y: 0, z: this.joystick.horizontal, },
+                angular: { x: 0, y: 0, z: -this.joystick.horizontal, },
             })
             topic.publish(message)
         },
@@ -124,6 +124,7 @@ var app = new Vue({
             this.resetJoystickVals()
         },
         doDrag(event) {
+
             if (this.dragging) {
                 this.x = event.offsetX
                 this.y = event.offsetY
@@ -131,21 +132,22 @@ var app = new Vue({
                 this.dragCircleStyle.display = 'inline-block'
 
                 let minTop = ref.offsetTop - parseInt(this.dragCircleStyle.height) / 2
-                let maxTop = minTop + 200
+                let maxTop = minTop + 100
                 let top = this.y + minTop
                 this.dragCircleStyle.top = `${top}px`
 
                 let minLeft = ref.offsetLeft - parseInt(this.dragCircleStyle.width) / 2
-                let maxLeft = minLeft + 200
+                let maxLeft = minLeft + 100
                 let left = this.x + minLeft
                 this.dragCircleStyle.left = `${left}px`
 
                 this.setJoystickVals()
             }
+
         },
         setJoystickVals() {
-            this.joystick.vertical = -1 * ((this.y / 200) - 0.5)
-            this.joystick.horizontal = +1 * ((this.x / 200) - 0.5)
+            this.joystick.vertical = -1 * ((this.y / 100) - 0.5)
+            this.joystick.horizontal = +1 * ((this.x / 100) - 0.5)
         },
         resetJoystickVals() {
             this.joystick.vertical = 0
@@ -155,8 +157,8 @@ var app = new Vue({
             this.viewer = new ROS3D.Viewer({
                 background: '#cccccc',
                 divID: 'div3DViewer',
-                width: 400,
-                height: 300,
+                width: 300,
+                height: 200,
                 antialias: true,
                 fixedFrame: 'odom'
             })

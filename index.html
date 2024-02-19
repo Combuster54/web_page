@@ -30,13 +30,12 @@
 
     <!-- Camera  -->
     <script type="text/javascript" src="mjpegcanvas.min.js"></script>
-
     <style type="text/css">
         #dragstartzone {
             position: relative;
             display: inline-block;
-            width: 125px;
-            height: 125px;
+            width: 100px;
+            height: 100px;
             border: 1px solid #333;
             border-radius: 50%;
             z-index: 10;
@@ -54,12 +53,14 @@
             -moz-user-select: -moz-none;
             -khtml-user-select: none;
             -webkit-user-select: none;
+
         }
 
         #dragCircle:hover {
             background-color: lightcoral;
         }
     </style>
+
 </head>
 
 <body>
@@ -95,7 +96,7 @@
                     <div class="col-5">
                         <div class="card mt-2">
                             <div class="card-header">
-                                <h4>Robot model</h4>
+                                <h5>Robot model</h5>
                                 <div class="col-md-12 col-sm-6" style="overflow:auto;">
                                     <!-- 1st row -->
                                     <div class="row">
@@ -112,7 +113,7 @@
                     <div class="col-6">
                         <div class="card mt-2">
                             <div class="card-header">
-                                <h4>Generated Map</h4>
+                                <h5>Generated Map</h5>
                                 <div class="col-md-12 col-sm-6" style="overflow:auto;">
                                     <div class="row">
                                         <div class="col-md-12 text-center my-2">
@@ -130,7 +131,7 @@
                     <div class="col-5">
                         <div class="card mt-2">
                             <div class="card-header">
-                                <h4>Camera</h4>
+                                <h5>Camera</h5>
                                 <div class="col-md-12 col-sm-6 text-center">
                                     <div id="divCamera"></div>
                                 </div>
@@ -142,7 +143,7 @@
                     <div class="col-3">
                         <div class="card mt-2">
                             <div class="card-header">
-                                <h4>Commands</h4>
+                                <h5>Commands</h5>
                                 <div class="col-md-15">
                                     <div class="card">
                                         <div class="card-body text-center">
