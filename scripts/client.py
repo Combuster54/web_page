@@ -39,43 +39,68 @@ if __name__ == '__main__':
     try:
         
         point_1 = Point()
-        point_1.x = 0.6755 
-        point_1.y = -0.4972
+        point_1.x = 0.67 
+        point_1.y = -0.49
 
         point_2 = Point()
-        point_2.x = 0.7037
-        point_2.y = 0.4217
+        point_2.x = 0.70
+        point_2.y = 0.42
 
+        #?
         point_3 = Point()
         point_3.x = 0.283
         point_3.y = 0.416
 
         point_4 = Point()
-        point_4.x = 0.23250
-        point_4.y = 0.0552
+        point_4.x = 0.232
+        point_4.y = 0.055
 
         point_5 = Point()
-        point_5.x = -0.118690
-        point_5.y = -0.006254
-
-        point_6 = Point()
-        point_6.x = -0.103782
-        point_6.y = -0.009988
+        point_5.x = -0.10
+        point_5.y = -0.00
     
+        #Left behind start line
+        point_7 = Point()
+        point_7.x = -0.20
+        point_7.y = -0.55
+
+        point_8 = Point() 
+        point_8.x = -0.60
+        point_8.y = -0.49
+
+
+        #Right side
+        point_9 = Point()
+        point_9.x = -0.20
+        point_9.y = 0.55
+
+        point_10 = Point()
+        point_10.x = -0.5956
+        point_10.y =  0.4430
+
         # Enviar varias metas (puedes modificar estas coordenadas según sea necesario)
         send_goal(point_1.x , point_1.y, 0.0)
         time.sleep(1)
-        send_goal(point_2.y ,  point_2.y, 0.0)
+        send_goal(point_2.x ,  point_2.y, 0.0)
         time.sleep(1)
-        send_goal(point_3.y ,  point_3.y, 0.0)
+        send_goal(point_3.x ,  point_3.y, 0.0)
         time.sleep(1)
-        send_goal(point_4.y ,  point_4.y, 0.0)
+        send_goal(point_4.x ,  point_4.y, 0.0)
         time.sleep(1)
-        send_goal(point_5.y ,  point_5.y, 0.0)
+        send_goal(point_5.x ,  point_5.y, 0.0)
         time.sleep(1)
-        send_goal(point_6.y ,  point_6.y, 0.0)
+        send_goal(point_7.x ,  point_7.y, 0.0)
         time.sleep(1)
-
+        send_goal(point_8.x ,  point_8.y, 0.0)
+        time.sleep(1)
+        send_goal(point_7.x ,  point_7.y, 0.0)
+        time.sleep(1)
+        send_goal(point_5.x ,  point_5.y, 0.0)
+        time.sleep(1)
+        send_goal(point_9.x ,  point_9.y, 0.0)
+        time.sleep(1)
+        send_goal(point_10.x ,  point_10.y, 0.0)
+        time.sleep(1)
         # Puedes enviar más metas llamando a send_goal con diferentes coordenadas
     except rospy.ROSInterruptException:
         rospy.logerr("Interrupción del programa")

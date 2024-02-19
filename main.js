@@ -6,6 +6,7 @@ var app = new Vue({
         ros: null,
         logs: [],
         loading: false,
+        set: false,
         rosbridge_address: '',
         port: '9090',
         // 3D stuff
@@ -63,7 +64,7 @@ var app = new Vue({
                 })
                 
                 this.mapGridClient.on('change', () => {
-                    this.mapViewer.scaleToDimensions(this.mapGridClient.currentGrid.width /2 , this.mapGridClient.currentGrid.height / 2);
+                    this.mapViewer.scaleToDimensions(this.mapGridClient.currentGrid.width /4 , this.mapGridClient.currentGrid.height / 4);
                     this.mapViewer.shift(this.mapGridClient.currentGrid.pose.position.x + 0, this.mapGridClient.currentGrid.pose.position.y + 0.0)
                 })
 
@@ -144,6 +145,9 @@ var app = new Vue({
                 this.setJoystickVals()
             }
 
+        },
+        sendPoint(){
+        
         },
         setJoystickVals() {
             this.joystick.vertical = -1 * ((this.y / 100) - 0.5)
