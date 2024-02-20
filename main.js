@@ -7,6 +7,7 @@ var app = new Vue({
         logs: [],
         loading: false,
         set: false,
+        build_map:false,
         rosbridge_address: '',
         port: '9090',
         // 3D stuff
@@ -37,11 +38,23 @@ var app = new Vue({
         // publisher
         pubInterval: null,
 
+        send_first_point: false,
+        send_second_point: false,
+
+        // action
+        action: {
+            goal: { position: {x: 0, y: 0, z: 0} },
+            feedback: { position: 0, state: 'idle' },
+            result: { success: false },
+            status: { status: 0, text: '' },
+        }
+
     },
     // helper methods to connect to ROS
     methods: {
         connect: function() {
             this.loading = true
+
             this.ros = new ROSLIB.Ros({
                 url: this.rosbridge_address
             })
@@ -49,7 +62,8 @@ var app = new Vue({
                 this.logs.unshift((new Date()).toTimeString() + ' - Connected!')
                 this.connected = true
                 this.loading = false
-                
+
+
                 this.mapViewer = new ROS2D.Viewer({
                     divID: 'map',
                     width: 300,
@@ -101,6 +115,110 @@ var app = new Vue({
         },
         disconnect: function() {
             this.ros.close()
+        },
+        building_map: function(){
+
+        },
+        sendFirstPoint: function(){
+        
+            let actionClient = new ROSLIB.ActionClient({
+                ros : this.ros,
+                serverName : '/tortoisebot_as',
+                actionName : 'course_web_dev_ros/WaypointActionAction'
+            })
+
+            this.action.goal.position.x = 0.67
+            this.action.goal.position.y = -0.49
+
+            this.goal = new ROSLIB.Goal({
+                actionClient : actionClient,
+                goalMessage: {
+                    ...this.action.goal
+                }
+            })
+
+            this.goal.on('status', (status) => {
+                this.action.status = status
+            })
+
+            this.goal.on('feedback', (feedback) => {
+                this.action.feedback = feedback
+            })
+
+            this.goal.on('result', (result) => {
+                this.action.result = result
+            })
+
+            this.goal.send()
+
+        },
+        sendSecondPoint: function(){
+        
+            let actionClient = new ROSLIB.ActionClient({
+                ros : this.ros,
+                serverName : '/tortoisebot_as',
+                actionName : 'course_web_dev_ros/WaypointActionAction'
+            })
+
+            this.action.goal.position.x = 0.70
+            this.action.goal.position.y = 0.42
+
+            this.goal = new ROSLIB.Goal({
+                actionClient : actionClient,
+                goalMessage: {
+                    ...this.action.goal
+                }
+            })
+
+            this.goal.on('status', (status) => {
+                this.action.status = status
+            })
+
+            this.goal.on('feedback', (feedback) => {
+                this.action.feedback = feedback
+            })
+
+            this.goal.on('result', (result) => {
+                this.action.result = result
+            })
+
+            this.goal.send()
+
+        },
+        nothing: function(){
+        
+        },
+        sendGoal: function() {
+
+            let actionClient = new ROSLIB.ActionClient({
+                ros : this.ros,
+                serverName : '/tortoisebot_as',
+                actionName : 'course_web_dev_ros/WaypointActionAction'
+            })
+
+            this.goal = new ROSLIB.Goal({
+                actionClient : actionClient,
+                goalMessage: {
+                    ...this.action.goal
+                }
+            })
+
+            this.goal.on('status', (status) => {
+                this.action.status = status
+            })
+
+            this.goal.on('feedback', (feedback) => {
+                this.action.feedback = feedback
+            })
+
+            this.goal.on('result', (result) => {
+                this.action.result = result
+            })
+
+            this.goal.send()
+        },
+        cancelGoal: function() {
+            this.goal.cancel()
         },
         sendCommand: function() {
             let topic = new ROSLIB.Topic({

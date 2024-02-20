@@ -82,12 +82,24 @@
                 </div>
                 <div class="card mt-2">
                     <div class="card-header">
+                        <h5>Auto-building map</h5>
+                    </div>
+                    <div class="card-body">
+                        <button :disabled="loading" class="btn btn-danger" @click="cancelGoal"
+                            v-if=" build_map">Cancel</button>
+                        <button :disabled="loading" class="btn btn-success" @click="building_map" v-else>Generate
+                            Map!</button>
+                    </div>
+                </div>
+                <div class="card mt-2">
+                    <div class="card-header">
                         <h4>Logs</h5>
                     </div>
                     <div class="card-body">
                         <p v-for="log in logs">{{ log }}</p>
                     </div>
                 </div>
+
             </div>
             <div class="col-9">
                 <h3>Controls</h3>
@@ -154,6 +166,27 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-15">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+
+                                            <button :disabled="set" class="btn btn-primary" @click="cancelGoal"
+                                                v-if="send_first_point">Cancel</button>
+                                            <button :disabled="set" class="btn btn-success" @click="sendFirstPoint"
+                                                v-else>1st
+                                                Point</button>
+                                            <br>
+                                            <br>
+
+                                            <button :disabled="set" class="btn btn-primary" @click="cancelGoal"
+                                                v-if="send_second_point">Cancel</button>
+                                            <button :disabled="set" class="btn btn-success" @click="sendSecondPoint"
+                                                v-else>2nd
+                                                Point</button>
+
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
                             <div class="card-body">
@@ -163,27 +196,10 @@
                     <div class="col-3">
                         <div class="card mt-2">
                             <div class="card-header">
-                                <div class="col-md-15">
+                                <div class="col-md-20">
                                     <div class="card">
-                                        <div class="card-body text-center">
+                                        <!-- <div class="card-body text-center">
                                             <label>Points</label>
-                                            <br>
-                                            <br>
-                                            <button :disabled="set" class="btn btn-primary" @click="disconnect"
-                                                v-if="connected">1st Point</button>
-                                            <button :disabled="set" class="btn btn-success" @click="sendPoint"
-                                                v-else>1st
-                                                Point</button>
-                                            <br>
-                                            <br>
-
-                                            <button :disabled="set" class="btn btn-primary" @click="disconnect"
-                                                v-if="connected">2nd Point</button>
-                                            <button :disabled="set" class="btn btn-success" @click="sendPoint"
-                                                v-else>2nd
-                                                Point</button>
-                                            <br>
-                                            <br>
 
                                             <button :disabled="set" class="btn btn-primary" @click="disconnect"
                                                 v-if="connected">3th Point</button>
@@ -193,8 +209,48 @@
 
                                             <br>
                                             <br>
+                                        </div> -->
 
+                                        <div class="col-14" style="overflow:auto;">
+                                            <div class="row">
+                                                <div class="col-md-12 text-center">
+                                                    <h6>Set your goal</h6>
+                                                    <div>
+                                                        <div>
+                                                            <label style="font-size: 14px;">X</label>
+                                                            <input type="number" v-model.number="action.goal.position.x"
+                                                                style="width: 60px;" />
 
+                                                        </div>
+                                                        <div>
+                                                            <label style="font-size: 14px;">Y</label>
+                                                            <input type="number" v-model.number="action.goal.position.y"
+                                                                style="width: 60px;" />
+                                                        </div>
+                                                        <button :disabled="!connected || action.status.status == 1"
+                                                            @click="sendGoal">Start</button>
+                                                        <button
+                                                            :disabled="!connected || ![1].includes(action.status.status)"
+                                                            @click="cancelGoal">Cancel</button>
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        <label class="text-muted">Feedback</label>
+                                                        <p>Position: {{ action.feedback.position.toFixed(2) }}</p>
+                                                        <p>State: {{ action.feedback.state}}</p>
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        <label class="text-muted">Result</label>
+                                                        <p>Succeeded? {{ action.result.success }}</p>
+                                                    </div>
+                                                    <hr />
+                                                    <div>
+                                                        <label class="text-muted">Status</label>
+                                                        <p>{{ action.status.text }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>
