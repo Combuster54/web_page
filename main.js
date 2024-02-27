@@ -10,18 +10,25 @@ var app = new Vue({
         build_map:false,
         rosbridge_address: '',
         port: '9090',
+
         // 3D stuff
         viewer: null,
         tfClient: null,
         urdfClient: null,
 
+        a: false,
         mapViewer: null,
         mapGridClient: null,
         interval: null,
 
+        goal: null,
+
+        start_action: false,
+
         dragging: false,
         x: 'no',
         y: 'no',
+
         dragCircleStyle: {
             margin: '0px',
             top: '0px',
@@ -30,14 +37,16 @@ var app = new Vue({
             width: '75px',
             height: '75px',
         },
+        
         // joystick valules
         joystick: {
             vertical: 0,
             horizontal: 0,
         },
+
         // publisher
         pubInterval: null,
-
+        send: false,
         send_first_point: false,
         send_second_point: false,
 
@@ -62,7 +71,7 @@ var app = new Vue({
                 this.logs.unshift((new Date()).toTimeString() + ' - Connected!')
                 this.connected = true
                 this.loading = false
-
+                this.a = true
 
                 this.mapViewer = new ROS2D.Viewer({
                     divID: 'map',
@@ -78,7 +87,7 @@ var app = new Vue({
                 })
                 
                 this.mapGridClient.on('change', () => {
-                    this.mapViewer.scaleToDimensions(this.mapGridClient.currentGrid.width /4 , this.mapGridClient.currentGrid.height / 4);
+                    this.mapViewer.scaleToDimensions(this.mapGridClient.currentGrid.width /1 , this.mapGridClient.currentGrid.height /1);
                     this.mapViewer.shift(this.mapGridClient.currentGrid.pose.position.x + 0, this.mapGridClient.currentGrid.pose.position.y + 0.0)
                 })
 
@@ -115,81 +124,23 @@ var app = new Vue({
         },
         disconnect: function() {
             this.ros.close()
+            this.goal = null
         },
-        building_map: function(){
+        // building_map: function(){
 
-        },
+        // },
         sendFirstPoint: function(){
-        
-            let actionClient = new ROSLIB.ActionClient({
-                ros : this.ros,
-                serverName : '/tortoisebot_as',
-                actionName : 'course_web_dev_ros/WaypointActionAction'
-            })
 
             this.action.goal.position.x = 0.67
             this.action.goal.position.y = -0.49
-
-            this.goal = new ROSLIB.Goal({
-                actionClient : actionClient,
-                goalMessage: {
-                    ...this.action.goal
-                }
-            })
-
-            this.goal.on('status', (status) => {
-                this.action.status = status
-            })
-
-            this.goal.on('feedback', (feedback) => {
-                this.action.feedback = feedback
-            })
-
-            this.goal.on('result', (result) => {
-                this.action.result = result
-            })
-
-            this.goal.send()
-
         },
         sendSecondPoint: function(){
         
-            let actionClient = new ROSLIB.ActionClient({
-                ros : this.ros,
-                serverName : '/tortoisebot_as',
-                actionName : 'course_web_dev_ros/WaypointActionAction'
-            })
-
             this.action.goal.position.x = 0.70
             this.action.goal.position.y = 0.42
 
-            this.goal = new ROSLIB.Goal({
-                actionClient : actionClient,
-                goalMessage: {
-                    ...this.action.goal
-                }
-            })
-
-            this.goal.on('status', (status) => {
-                this.action.status = status
-            })
-
-            this.goal.on('feedback', (feedback) => {
-                this.action.feedback = feedback
-            })
-
-            this.goal.on('result', (result) => {
-                this.action.result = result
-            })
-
-            this.goal.send()
-
-        },
-        nothing: function(){
-        
         },
         sendGoal: function() {
-
             let actionClient = new ROSLIB.ActionClient({
                 ros : this.ros,
                 serverName : '/tortoisebot_as',
@@ -204,33 +155,22 @@ var app = new Vue({
             })
 
             this.goal.on('status', (status) => {
-                this.action.status = status
-            })
+                this.$set(this.action, 'status', status);
+            });
 
-            this.goal.on('feedback', (feedback) => {
-                this.action.feedback = feedback
-            })
+                    this.goal.on('feedback', (feedback) => {
+                this.$set(this.action, 'feedback', feedback);
+            });
 
-            this.goal.on('result', (result) => {
-                this.action.result = result
-            })
+                        this.goal.on('result', (result) => {
+                this.$set(this.action, 'result', result);
+                document.getElementById('btnStart').disabled = false;
+            });
 
             this.goal.send()
         },
         cancelGoal: function() {
             this.goal.cancel()
-        },
-        sendCommand: function() {
-            let topic = new ROSLIB.Topic({
-                ros: this.ros,
-                name: '/cmd_vel',
-                messageType: 'geometry_msgs/Twist'
-            })
-            let message = new ROSLIB.Message({
-                linear: { x: 1, y: 0, z: 0, },
-                angular: { x: 0, y: 0, z: 0.5, },
-            })
-            topic.publish(message)
         },
         startDrag() {
             this.dragging = true
@@ -263,9 +203,6 @@ var app = new Vue({
                 this.setJoystickVals()
             }
 
-        },
-        sendPoint(){
-        
         },
         setJoystickVals() {
             this.joystick.vertical = -1 * ((this.y / 100) - 0.5)
@@ -334,6 +271,10 @@ var app = new Vue({
     },
     mounted() {
         window.addEventListener('mouseup', this.stopDrag)
-
+        this.interval = setInterval(() => {
+            if (this.ros != null && this.ros.isConnected) {
+                this.ros.getNodes((data) => { }, (error) => { })
+            }
+        }, 10000)
     },
 })
